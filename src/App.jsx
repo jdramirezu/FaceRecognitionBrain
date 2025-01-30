@@ -8,6 +8,8 @@ import Rank from './components/Rank/Rank.jsx'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.jsx';
 import "./App.css";
 import ParticlesBg from 'particles-bg'
+import Signin from './components/Signin/Signin.jsx'
+import Register from './components/Register/Register.jsx'
 
 const returnClarifaiRequestOptions = (imageUrl) =>{
   // Your PAT (Personal Access Token) can be found in the Account's Security section
@@ -53,6 +55,8 @@ const returnClarifaiRequestOptions = (imageUrl) =>{
 function App() {
   const [input, setInput] = useState("");
   const [box, setBox] = useState([]);
+  const [route, setRoute] = useState('signin');
+  const [isSignedIn,setIsSignedIn] = useState(false);
 
   const calculateFaceLocation = (data) =>{
     // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -120,19 +124,38 @@ function App() {
     })
     .catch(error => console.log('error', error));
   }
- 
 
-  
-  
+  const onRouteChange = (route) =>{
+    if(route === 'signin'){
+      setIsSignedIn(false);
+    } else if(route === 'home'){
+      setIsSignedIn(true);
+    }
+    setRoute(route);
+  }
 
   return (
     <>
       <ParticlesBg type="cobweb" bg={true} />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm onInputChange={onInputChange} on onButtonSubmit={onButtonSubmit}/>
-      <FaceRecognition boxes={box} imageUrl={input}/>
+      <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange}/>
+      {
+        route === "home" ?
+          <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm onInputChange={onInputChange} on onButtonSubmit={onButtonSubmit}/>
+            <FaceRecognition boxes={box} imageUrl={input}/>
+          </div>
+        :(
+          route === 'signin' ?
+            <Signin onRouteChange={onRouteChange}/>
+          :
+            <Register onRouteChange={onRouteChange} />
+        )
+        
+        
+        
+      }
     </>
   )
 }
