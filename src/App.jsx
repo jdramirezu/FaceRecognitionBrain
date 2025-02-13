@@ -52,18 +52,26 @@ const returnClarifaiRequestOptions = (imageUrl) =>{
   return requestOptions;
 }
 
-function App() {
-  const [input, setInput] = useState("");
-  const [box, setBox] = useState([]);
-  const [route, setRoute] = useState('signin');
-  const [isSignedIn,setIsSignedIn] = useState(false);
-  const [user, setUser] = useState({
+const initialState = {
+  input: "",
+  box: [],
+  route: 'signin',
+  isSignedIn: false,
+  user: {
     id:'',
     name: '',
     email: '',
     entries: 0,
     joined: ''
-  })
+  }
+}
+
+function App() {
+  const [input, setInput] = useState(initialState.input);
+  const [box, setBox] = useState(initialState.box);
+  const [route, setRoute] = useState(initialState.route);
+  const [isSignedIn,setIsSignedIn] = useState(initialState.isSignedIn);
+  const [user, setUser] = useState(initialState.user);
 
   // useEffect(() =>{
   //   fetch('http://localhost:3000/')
@@ -82,8 +90,6 @@ function App() {
   }
 
   const calculateFaceLocation = (data) =>{
-    // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    // const regions = data.outputs[0].data.regions;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
@@ -97,12 +103,6 @@ function App() {
       })
     });
     return clarifaiFace;
-    // return {
-    //   leftCol: clarifaiFace.left_col * width,
-    //   topRow: clarifaiFace.top_row * height,
-    //   rightCol: width - (clarifaiFace.right_col * width),
-    //   bottomRow: height - (clarifaiFace.bottom_row * height)
-    // }
   }
 
   const displayFaceBox = (box) =>{
@@ -155,7 +155,7 @@ function App() {
             console.log(count);
             setUser(Object.assign(user,{entries:count}))
             console.log(user.entries);
-          })
+          }).catch(console.log);
       }
     })
     .catch(error => console.log('error', error));
@@ -163,7 +163,11 @@ function App() {
 
   const onRouteChange = (route) =>{
     if(route === 'signin'){
-      setIsSignedIn(false);
+      setInput(initialState.input);
+      setBox(initialState.box);
+      setRoute(initialState.route);
+      setIsSignedIn(initialState.isSignedIn);
+      setUser(initialState.user);
     } else if(route === 'home'){
       setIsSignedIn(true);
     }
