@@ -32,7 +32,7 @@ const Register = ({onRouteChange, loadUser}) =>{
                 loadUser(user);
                 onRouteChange('home');
             }
-          })
+          }).catch(error => console.log("Error caught:",error));
     }
 
     return(
