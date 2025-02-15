@@ -69,7 +69,7 @@ function App() {
   }
 
   const onButtonSubmit = () =>{
-    fetch('http://localhost:3000/imageurl',{
+    fetch('https://facerecognitionbrainapi-sq1g.onrender.com/imageurl',{
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -102,7 +102,7 @@ function App() {
           });
       });
       if(result){
-        fetch('http://localhost:3000/image',{
+        fetch('https://facerecognitionbrainapi-sq1g.onrender.com/image',{
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
